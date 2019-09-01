@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>267381428578-i86473eo388m0743mj1n9oqd7pge1d9v.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.267381428578-i86473eo388m0743mj1n9oqd7pge1d9v</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>267381428578-fjpj5ojak0grnccec1pg29n3quhn437b.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB6rEaYZeHcxeW5ZU2i_YQCYmwgwx8f07s</string>
+	<key>GCM_SENDER_ID</key>
+	<string>267381428578</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.ramaz.admin</string>
+	<key>PROJECT_ID</key>
+	<string>ramaz-go</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ramaz-go.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:267381428578:ios:9b9cda558d264db5</string>
+	<key>DATABASE_URL</key>
+	<string>https://ramaz-go.firebaseio.com</string>
+</dict>
+</plist>
