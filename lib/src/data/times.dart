@@ -109,9 +109,10 @@ class Special {
 	}
 
 	@override
-	operator == (Object other) => other is Special && 
-		deepEquals<Range> (other.periods, periods) && 
-		deepEquals<int>(other.skip ?? [], skip) &&
+	operator == (Object other) => other == null ? false : other is Special && 
+		!(other.name == null || name == null) &&
+		deepEquals<Range> (other.periods ?? [], periods ?? []) && 
+		deepEquals<int>(other.skip ?? [], skip ?? []) &&
 		other.name == name &&
 		other.mincha == mincha &&
 		other.homeroom == homeroom;

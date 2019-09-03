@@ -74,7 +74,7 @@ class DayBuilder extends StatelessWidget {
 									value: model.special,
 									hint: Text ("Schedule"),
 									onChanged: (Special special) async {
-										if (special == Special.none) {
+										if (identical (special, Special.none)) {
 											special = await SpecialBuilder.buildSpecial(context);
 										}
 										model.special = special;
