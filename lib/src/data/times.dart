@@ -30,11 +30,11 @@ class Time {
 
 	Time.fromJson(Map<String, dynamic> json) :
 		hour = json ["hour"] as int,
-		minute = json ["minute"] as int;
+		minute = json ["minutes"] as int;
 
 	Map<String, dynamic> toJson() => {
 		"hour": hour,
-		"minute": minute,
+		"minutes": minute,
 	};
 
 	@override
