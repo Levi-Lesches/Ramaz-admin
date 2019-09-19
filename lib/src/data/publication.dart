@@ -2,7 +2,7 @@ import "package:flutter/foundation.dart";
 
 @immutable
 class PublicationMetadata {
-	static Map<int, Map<int, List<String>>> getIssuesByMonth(List<String> issues) {
+	static Map<int, Map<int, List<String>>> getIssuesByMonth(Set<String> issues) {
 		final Map<int, Map<int, List<String>>> result = {};
 		for (final String issue in issues) {
 			final List<String> parts = issue.substring(
@@ -27,7 +27,7 @@ class PublicationMetadata {
 
 	final String description;
 	final String imagePath;
-	final List<String> issues;
+	final Set<String> issues;
 	final Map<int, Map<int, List<String>>> issuesByMonth;
 
 	PublicationMetadata({
@@ -36,13 +36,13 @@ class PublicationMetadata {
 		@required this.issues,
 	}) : issuesByMonth = getIssuesByMonth(issues);
 
-	PublicationMetadata.fromJson(Map<String, dynamic> json) : 
+	PublicationMetadata.fromJson(Map<String, String> json) : 
 		description = json ["description"],
 		imagePath = json ["imagePath"],
-		issues = json ["issues"].split(", "),
-		issuesByMonth = getIssuesByMonth(json ["issues"].split(", "));
+		issues = Set.of(json ["issues"].split(", ")),
+		issuesByMonth = getIssuesByMonth(Set.of(json ["issues"].split(", ")));
 
-	Map<String, dynamic> toJson() => {
+	Map<String, String> toJson() => {
 		"description": description,
 		"imagePath": imagePath,
 		"issues": issues.join(", ")
@@ -52,7 +52,7 @@ class PublicationMetadata {
 @immutable
 class Publication {
 	final String name;
-	final List<String> downloadedIssues;
+	final Set<String> downloadedIssues;
 	final PublicationMetadata metadata;
 
 	const Publication({
