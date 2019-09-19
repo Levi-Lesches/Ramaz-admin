@@ -3,16 +3,23 @@ import "package:ramaz_admin/services.dart";
 
 class ServicesCollection {
 	final Reader reader;
+	final String path;
 
 	AdminModel admin;
+	CloudStorage storage;
 
-	ServicesCollection(this.reader);
+	ServicesCollection(this.path, this.reader);
 
-	void init() => admin = AdminModel(reader);
+	Future<void> init() async {
+		admin = AdminModel(reader);
+		storage = CloudStorage(
+			path: path, 
+			publication: await Auth.publicationName,
+		);
+	}
 
 	Future<void> login() async {
-		reader
-			..adminData = await Firestore.admin;
-		init();
+		reader.adminData = await Firestore.admin;
+		await init();
 	}
 }

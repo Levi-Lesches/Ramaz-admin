@@ -22,7 +22,7 @@ void main({bool restart = false}) async {
 		reader.deleteAll();
 	}
 	final bool ready = reader.ready && await Auth.ready;
-	final ServicesCollection services = ServicesCollection(reader);
+	final ServicesCollection services = ServicesCollection(dir, reader);
 	try {
 		if (ready) services.init();
 	} catch (e) {
