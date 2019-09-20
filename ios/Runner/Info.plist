@@ -63,5 +63,13 @@
 	<string>Used to take pictures of publications</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>The microphone is not used by this app</string>
+	<!-- End of image picker section -->
+	<!-- File picker section -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<!-- End of file picker section -->
 </dict>
 </plist>

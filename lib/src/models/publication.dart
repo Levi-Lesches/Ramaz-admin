@@ -1,3 +1,4 @@
+import "dart:io";
 import "package:flutter/foundation.dart";
 
 import "package:ramaz_admin/data.dart";
@@ -71,10 +72,10 @@ class PublicationModel with ChangeNotifier {
 		return save();
 	}
 
-	Future<void> replaceImage(String path) async {
+	Future<void> replaceImage(File file) async {
 		loading = true;
 		notifyListeners();
-		await storage.uploadImage(path);
+		await storage.uploadImage(file);
 		await save();
 		await storage.getImage();
 		loading = false;
@@ -96,22 +97,22 @@ class PublicationModel with ChangeNotifier {
 		publication.downloadedIssues.remove(toRemove);
 	}
 
-	Future<void> replaceIssue(String issue, String path) async {
+	Future<void> replaceIssue(String issue, File file) async {
 		loading = true;
 		notifyListeners();
-		await storage.uploadIssue(issue, path);
+		await storage.uploadIssue(issue, file);
 		deleteSavedIssue(issue);
 		await getIssue(issue);
 		loading = false;
 		notifyListeners();
 	}
 
-	Future<void> upload(String path) async {
+	Future<void> upload(File file) async {
 		loading = true;
 		notifyListeners();
 		final DateTime now = DateTime.now();
 		final String issue = "${publication.name}/${now.year}_${now.month}_${now.day}.pdf";
-		await storage.uploadIssue(issue, path);
+		await storage.uploadIssue(issue, file);
 		publication.metadata.issues.add(issue);
 		await save();
 	}

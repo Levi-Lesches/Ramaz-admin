@@ -57,8 +57,8 @@ class SpecialBuilderState extends State<SpecialBuilder> {
 										SizedBox(
 											width: double.infinity,
 											height: 60,
-											child: Center(
-												child: const Text(
+											child: const Center(
+												child: Text(
 													"Use a preset",
 													textScaleFactor: 1.5
 												),

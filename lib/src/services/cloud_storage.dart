@@ -29,11 +29,11 @@ class CloudStorage {
 	Future<void> getIssue(String issue) => 
 		root.child(issue).writeToFile(File(getPath(issue))).future;
 
-	Future<void> uploadImage(String path) => 
-		root.child("$publication/$publication.png").putFile(File(path)).onComplete;
+	Future<void> uploadImage(File file) => 
+		root.child("$publication/$publication.png").putFile(file).onComplete;
 
-	Future<void> uploadIssue(String issue, String path) => 
-		root.child(issue).putFile(File(path)).onComplete;
+	Future<void> uploadIssue(String issue, File file) => 
+		root.child(issue).putFile(file).onComplete;
 
 	Future<void> uploadMetadata(Map<String, String> metadata) =>
 		root.child("$publication/issues.txt").updateMetadata(
