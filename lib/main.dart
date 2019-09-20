@@ -7,14 +7,7 @@ import "package:ramaz_admin/widgets.dart";
 import "package:ramaz_admin/services.dart";
 import "package:ramaz_admin/services_collection.dart";
 
-const Color BLUE = Color(0xFF004B8D);  // (255, 0, 75, 140);
-const Color GOLD = Color(0xFFF9CA15);
-const Color BLUE_LIGHT = Color(0XFF4A76BE);
-const Color BLUE_DARK = Color (0xFF00245F);
-const Color GOLD_DARK = Color (0XFFC19A00);
-const Color GOLD_LIGHT = Color (0XFFFFFD56);
-
-void main({bool restart = false}) async {
+Future<void> main({bool restart = false}) async {
 	final String dir = (await getApplicationDocumentsDirectory()).path;
 	final Reader reader = Reader(dir);
 	if (restart) {
@@ -24,19 +17,22 @@ void main({bool restart = false}) async {
 	final bool ready = reader.ready && await Auth.ready;
 	final ServicesCollection services = ServicesCollection(dir, reader);
 	try {
-		if (ready) services.init();
-	} catch (e) {
-		if (!restart) 
-			main(restart: true);
+		if (ready) {
+			await services.init();
+		}
+	} on Exception {
+		if (!restart) {
+			return main(restart: true);
+		}
 	}
-	runApp(AdminConsole(services, ready));
+	runApp(AdminConsole(services, ready: ready));
 }
 
 class AdminConsole extends StatelessWidget {
 	final ServicesCollection services;
 	final bool ready;
 
-	const AdminConsole(this.services, this.ready);
+	const AdminConsole(this.services, {@required this.ready});
 
 	@override
 	Widget build(BuildContext context) => Services(
@@ -45,17 +41,17 @@ class AdminConsole extends StatelessWidget {
 			theme: ThemeData(
 				brightness: Brightness.light,
 				primarySwatch: Colors.blue,
-				primaryColor: BLUE,
+				primaryColor: RamazColors.blue,
 				primaryColorBrightness: Brightness.dark,
-				primaryColorLight: BLUE_LIGHT,
-				primaryColorDark: BLUE_DARK,
-				accentColor: GOLD,
+				primaryColorLight: RamazColors.blueLight,
+				primaryColorDark: RamazColors.blueDark,
+				accentColor: RamazColors.gold,
 				accentColorBrightness: Brightness.light,
-				cursorColor: BLUE_LIGHT,
-				textSelectionHandleColor: BLUE_LIGHT,
-				buttonColor: GOLD,
-				buttonTheme: ButtonThemeData (
-					buttonColor: GOLD,
+				cursorColor: RamazColors.blueLight,
+				textSelectionHandleColor: RamazColors.blueLight,
+				buttonColor: RamazColors.gold,
+				buttonTheme: const ButtonThemeData (
+					buttonColor: RamazColors.gold,
 					textTheme: ButtonTextTheme.normal,
 				),
 			),
