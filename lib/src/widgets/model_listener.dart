@@ -3,7 +3,9 @@ import "package:flutter/material.dart";
 typedef ModelBuilder<T> = T Function();
 typedef ModelWidgetBuilder<T, U> = Widget Function(T, Widget, U);
 
-class ModelListener<Model extends ChangeNotifier, UIModel> extends StatefulWidget {
+class ModelListener<
+	Model extends ChangeNotifier, UIModel
+> extends StatefulWidget {
 	final ModelBuilder<Model> model;
 	final ModelWidgetBuilder<Model, UIModel> builder;
 	final ModelBuilder<UIModel> uiModel;
@@ -19,10 +21,14 @@ class ModelListener<Model extends ChangeNotifier, UIModel> extends StatefulWidge
 		this.uiModel,
 	});
 
-	ModelListenerState<Model, UIModel> createState() => ModelListenerState<Model, UIModel>();
+	@override
+	ModelListenerState<Model, UIModel> createState() => 
+		ModelListenerState<Model, UIModel>();
 }
 
-class ModelListenerState<Model extends ChangeNotifier, UIModel> extends State<ModelListener<Model, UIModel>> {
+class ModelListenerState<
+	Model extends ChangeNotifier, UIModel
+> extends State<ModelListener<Model, UIModel>> {
 	Model model;
 	UIModel uiModel;
 
@@ -31,9 +37,11 @@ class ModelListenerState<Model extends ChangeNotifier, UIModel> extends State<Mo
 	@override 
 	void initState() {
 		super.initState();
-		model = widget.model();
-		model.addListener(listener);
-		if (widget.uiModel != null) uiModel = widget.uiModel();
+		model = widget.model()
+			..addListener(listener);
+		if (widget.uiModel != null) {
+			uiModel = widget.uiModel();
+		}
 	}
 
 	@override
@@ -43,7 +51,9 @@ class ModelListenerState<Model extends ChangeNotifier, UIModel> extends State<Mo
 	@override 
 	void dispose() {
 		model.removeListener(listener);
-		if (widget.dispose) model.dispose();
+		if (widget.dispose) {
+			model.dispose();
+		}
 		super.dispose();
 	}
 }

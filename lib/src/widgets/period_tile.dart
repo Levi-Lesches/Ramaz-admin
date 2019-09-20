@@ -23,8 +23,14 @@ class PeriodTile extends StatelessWidget {
 		@required this.isMincha,
 		@required this.index,
 	}) : 
-		assert (!isHomeroom || !isMincha),
-		assert (isHomeroom || isMincha || index != null),
+		assert (
+			!isHomeroom || !isMincha, 
+			"A period cannot be both homeroom and mincha"
+		),
+		assert (
+			isHomeroom || isMincha || index != null, 
+			"A period must either have a period number or be homeroom or mincha"
+		),
 		subtitle = isHomeroom ? "Homeroom" : 
 			isMincha ? "Mincha" : "$index",
 		start = TimeOfDay(hour: range.start.hour, minute: range.start.minute),
@@ -52,7 +58,6 @@ class PeriodTile extends StatelessWidget {
 							children: [
 								WidgetSpan(
 									child: InkWell(
-										child: Text (start.format(context), style: TextStyle(color: Colors.blue)),
 										onTap: () async {
 											final TimeOfDay time = await showTimePicker(
 												context: context,
@@ -64,13 +69,16 @@ class PeriodTile extends StatelessWidget {
 													range.end,
 												)
 											);
-										}
+										},
+										child: Text (
+											start.format(context), 
+											style: TextStyle(color: Colors.blue)
+										),
 									),
 								),
-								TextSpan(text: " -- "),
+								const TextSpan(text: " -- "),
 								WidgetSpan(
 									child: InkWell(
-										child: Text (end.format(context), style: TextStyle(color: Colors.blue)),
 										onTap: () async {
 											final TimeOfDay time = await showTimePicker(
 												context: context,
@@ -82,15 +90,19 @@ class PeriodTile extends StatelessWidget {
 													Time(time.hour, time.minute),
 												)
 											);
-										}
+										},
+										child: Text (
+											end.format(context), 
+											style: TextStyle(color: Colors.blue)
+										),
 									),
 								),
 							]
 						)
 					),
 					trailing: FlatButton(
-						child: Text (skipped ? "UNSKIP" : "SKIP"),
 						onPressed: toggleSkip,
+						child: Text (skipped ? "UNSKIP" : "SKIP"),
 					),
 				)
 			]

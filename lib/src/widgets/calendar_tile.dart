@@ -11,6 +11,7 @@ class CalendarTile extends StatelessWidget{
 		@required this.day,
 	});
 
+	@override
 	Widget build(BuildContext context) => Container(
 		decoration: BoxDecoration(border: Border.all()),
 		child: Stack (
@@ -30,10 +31,10 @@ class CalendarTile extends StatelessWidget{
 					if (
 						day?.letter != null &&
 						!<String>[Special.rotate.name, Special.regular.name]
-							.contains(day.special?.name ?? null)
+							.contains(day.special?.name)
 					) Align(
 						alignment: Alignment.bottomCenter,
-						child: Text ("•", textScaleFactor: 0.8),
+						child: const Text ("•", textScaleFactor: 0.8),
 					)
 				]
 			]

@@ -18,5 +18,5 @@ class Services extends InheritedWidget {
 	AdminModel get admin => services.admin;
 
 	@override
-	bool updateShouldNotify(_) => false;
+	bool updateShouldNotify(InheritedWidget oldWidget) => false;
 }

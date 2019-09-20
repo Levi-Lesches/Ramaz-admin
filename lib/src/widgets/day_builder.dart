@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 
+import "package:ramaz_admin/data.dart";
+import "package:ramaz_admin/models.dart";
+
 import "model_listener.dart";
 import "services.dart";
 import "special_builder.dart";
-
-import "package:ramaz_admin/data.dart";
-import "package:ramaz_admin/models.dart";
 
 class DayBuilder extends StatelessWidget {
 	static Future<Day> getDay({
@@ -25,32 +25,34 @@ class DayBuilder extends StatelessWidget {
 	});
 
 	@override
-	Widget build (BuildContext context) => ModelListener<DayBuilderModel, Null>(
+	Widget build (BuildContext context) => ModelListener<DayBuilderModel, void>(
 		model: () => DayBuilderModel(Services.of(context).admin),
+		// Here, the builder is like the child property. 
+		// ignore: sort_child_properties_last
 		child: FlatButton(
-			child: Text ("Cancel"),
-			onPressed: Navigator.of(context).pop,
+			onPressed: () => Navigator.of(context).pop(),
+			child: const Text ("Cancel"),
 		),
 		builder: (DayBuilderModel model, [Widget cancel, _]) => AlertDialog(
-			title: Text ("Edit day"),
+			title: const Text ("Edit day"),
 			content: Column (
 				mainAxisSize: MainAxisSize.min,
 				children: [
 					Text ("Date: $month $date"),
-					SizedBox(height: 20),
+					const SizedBox(height: 20),
 					Container(
 						width: double.infinity,
 						child: Wrap (
 							alignment: WrapAlignment.spaceBetween,
 							crossAxisAlignment: WrapCrossAlignment.center,
 							children: [
-								Text(
+								const Text(
 									"Select letter", 
 									textAlign: TextAlign.center
 								),
 								DropdownButton<Letter>(
 									value: model.letter,
-									hint: Text ("Letter"),
+									hint: const Text ("Letter"),
 									onChanged: (Letter letter) => model.letter = letter,
 									items: [
 										for (final Letter letter in Letter.values)
@@ -63,16 +65,16 @@ class DayBuilder extends StatelessWidget {
 							]
 						),
 					),
-					SizedBox(height: 20),
+					const SizedBox(height: 20),
 					Container(
 						width: double.infinity,
 						child: Wrap (
 							runSpacing: 3,
 							children: [
-								Text ("Select schedule"),
+								const Text ("Select schedule"),
 								DropdownButton<Special>(
 									value: model.special,
-									hint: Text ("Schedule"),
+									hint: const Text ("Schedule"),
 									onChanged: (Special special) async {
 										if (identical (special, Special.none)) {
 											special = await SpecialBuilder.buildSpecial(context);
@@ -80,17 +82,20 @@ class DayBuilder extends StatelessWidget {
 										model.special = special;
 									},
 									items: [
-										for (final Special special in model.presetSpecials + model.userSpecials)
-											DropdownMenuItem<Special>(
-												value: special,
-												child: Text (special.name),
-											),
+										for (
+											final Special special in 
+											model.presetSpecials + model.userSpecials
+										) DropdownMenuItem<Special>(
+											value: special,
+											child: Text (special.name),
+										),
+
 										DropdownMenuItem<Special>(
 											value: Special.none,
 											child: SizedBox(
 												child: Row(
 													children: [
-														Text ("Make new schedule"),
+														const Text ("Make new schedule"),
 														Icon(Icons.add_circle_outline)
 													]
 												)
@@ -106,9 +111,9 @@ class DayBuilder extends StatelessWidget {
 			actions: [
 				cancel,
 				RaisedButton(
-					child: Text ("Save", style: TextStyle(color: Colors.white)),
 					onPressed: !model.ready ? null :() => 
-						Navigator.of(context).pop(model.day)
+						Navigator.of(context).pop(model.day),
+					child: Text ("Save", style: TextStyle(color: Colors.white)),
 				)
 			]
 		),
