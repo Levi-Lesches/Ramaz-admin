@@ -6,7 +6,7 @@ import "package:ramaz_admin/widgets.dart";
 
 class PublicationsPage extends StatelessWidget {
 	@override
-	Widget build(BuildContext context) => ModelListener<PublicationModel, void>(
+	Widget build(BuildContext context) => ModelListener<PublicationModel>(
 		model: () => PublicationModel(Services.of(context).services),
 		builder: (BuildContext context, PublicationModel model, Widget _) => Scaffold(
 

@@ -7,10 +7,10 @@ import "drawer.dart";
 
 class SpecialPage extends StatelessWidget {
 	@override
-	Widget build(BuildContext context) => ModelListener<AdminModel, void>(
+	Widget build(BuildContext context) => ModelListener<AdminModel>(
 		model: () => Services.of(context).admin,
 		dispose: false,
-		builder: (AdminModel model, _, __) => Scaffold(
+		builder: (BuildContext context, AdminModel model, _,) => Scaffold(
 			drawer: NavDrawer(),
 			appBar: AppBar(
 				title: const Text("Custom schedules"),

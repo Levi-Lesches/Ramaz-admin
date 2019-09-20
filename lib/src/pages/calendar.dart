@@ -24,9 +24,9 @@ class CalendarPage extends StatelessWidget {
 		drawer: NavDrawer(),
 		body: Padding (
 			padding: const EdgeInsets.symmetric(horizontal: 5),
-			child: ModelListener<CalendarModel, void>(
+			child: ModelListener<CalendarModel>(
 				model: () => CalendarModel(),
-				builder: (CalendarModel model, _, __) => ListView(
+				builder: (BuildContext context, CalendarModel model, _,) => ListView(
 					children: [
 						SizedBox(
 							height: 50,

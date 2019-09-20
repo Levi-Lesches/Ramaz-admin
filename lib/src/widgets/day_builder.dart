@@ -25,7 +25,7 @@ class DayBuilder extends StatelessWidget {
 	});
 
 	@override
-	Widget build (BuildContext context) => ModelListener<DayBuilderModel, void>(
+	Widget build (BuildContext context) => ModelListener<DayBuilderModel>(
 		model: () => DayBuilderModel(Services.of(context).admin),
 		// Here, the builder is like the child property. 
 		// ignore: sort_child_properties_last
@@ -33,7 +33,7 @@ class DayBuilder extends StatelessWidget {
 			onPressed: () => Navigator.of(context).pop(),
 			child: const Text ("Cancel"),
 		),
-		builder: (DayBuilderModel model, [Widget cancel, _]) => AlertDialog(
+		builder: (_, DayBuilderModel model, Widget cancel) => AlertDialog(
 			title: const Text ("Edit day"),
 			content: Column (
 				mainAxisSize: MainAxisSize.min,
