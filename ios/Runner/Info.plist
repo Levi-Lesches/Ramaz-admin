@@ -41,7 +41,6 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<!-- Put me in the [my_project]/ios/Runner/Info.plist file -->
 	<!-- Google Sign-in Section -->
 	<key>CFBundleURLTypes</key>
 	<array>
@@ -57,5 +56,12 @@
 		</dict>
 	</array>
 	<!-- End of the Google Sign-in Section -->
+	<!-- image_picker section -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to upload publication images from the gallery</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Used to take pictures of publications</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>The microphone is not used by this app</string>
 </dict>
 </plist>
