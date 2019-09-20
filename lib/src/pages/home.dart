@@ -6,11 +6,11 @@ class HomePage extends StatelessWidget {
 	@override
 	Widget build(BuildContext context) => Scaffold(
 		drawer: NavDrawer(),
-		appBar: AppBar(title: Text ("Home")),
+		appBar: AppBar(title: const Text ("Home")),
 		body: Center (
 			child: Column(
 				mainAxisSize: MainAxisSize.min,
-				children: [
+				children: const [
 					Text ("Swipe from the left for options", textScaleFactor: 1.3),
 					SizedBox(height: 10),
 					Text ("⟵", textScaleFactor: 2)

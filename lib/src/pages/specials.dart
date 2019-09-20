@@ -1,30 +1,30 @@
 import "package:flutter/material.dart";
 
-import "drawer.dart";
-
 import "package:ramaz_admin/models.dart";
 import "package:ramaz_admin/widgets.dart";
 
+import "drawer.dart";
+
 class SpecialPage extends StatelessWidget {
 	@override
-	Widget build(BuildContext context) => ModelListener<AdminModel, Null>(
+	Widget build(BuildContext context) => ModelListener<AdminModel, void>(
 		model: () => Services.of(context).admin,
 		dispose: false,
 		builder: (AdminModel model, _, __) => Scaffold(
 			drawer: NavDrawer(),
 			appBar: AppBar(
-				title: Text("Custom schedules"),
+				title: const Text("Custom schedules"),
 			),
 			floatingActionButton: FloatingActionButton(
-				child: Icon(Icons.add),
 				onPressed: () async => model.addSpecial(
 					await SpecialBuilder.buildSpecial(context),
 				),
+				child: Icon(Icons.add),
 			),
 			body: Padding(
-				padding: EdgeInsets.all(20), 
-				child: model.admin.specials.length == 0
-					? Center (
+				padding: const EdgeInsets.all(20), 
+				child: model.admin.specials.isEmpty
+					? const Center (
 						child: Text (
 							"You don't have any schedules yet, but you can make one!",
 							textScaleFactor: 1.5,

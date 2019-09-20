@@ -10,48 +10,51 @@ class LoginPage extends StatelessWidget {
 
 	@override
 	Widget build(BuildContext context) => Scaffold(
-		appBar: AppBar(title: Text ("Login")),
+		appBar: AppBar(title: const Text ("Login")),
 		body: ValueListenableBuilder<bool>(
 			valueListenable: loadingNotifier,
+			builder: (BuildContext context, bool loading, Widget child) => Column (
+				children: [
+					if (loading) const LinearProgressIndicator(),
+					const Spacer(flex: 1),
+					child,
+					const Spacer(flex: 1)
+				]
+			),
 			child: Padding (
-				padding: EdgeInsets.all(50),
+				padding: const EdgeInsets.all(50),
 				child: Column (
 					children: [
-						Text ("Welcome to the Ramaz console!", textScaleFactor: 2),
-						SizedBox(height: 30),
-						Text ("This app is only for Ramaz administrators and club captains.", textScaleFactor: 1.5),
-						SizedBox(height: 50),
+						const Text ("Welcome to the Ramaz console!", textScaleFactor: 2),
+						const SizedBox(height: 30),
+						const Text (
+							"This app is only for Ramaz administrators and club captains.", 
+							textScaleFactor: 1.5
+						),
+						const SizedBox(height: 50),
 						Builder(
 							builder: (BuildContext context) => ListTile(
 								leading: CircleAvatar(
-									backgroundImage: AssetImage("images/google.png"),
+									backgroundImage: const AssetImage("images/google.png"),
 									backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 								),
-								title: Text ("Login"),
+								title: const Text ("Login"),
 								onTap: () => login(context),
 							)
 						)
 					]
 				)
 			),
-			builder: (BuildContext context, bool loading, Widget child) => Column (
-				children: [
-					if (loading) LinearProgressIndicator(),
-					Spacer(flex: 1),
-					child,
-					Spacer(flex: 1)
-				]
-			)
 		)
 	);
 
 	void showError(BuildContext context) => showDialog(
 		context: context,
 		builder: (_) => AlertDialog(
-			title: Text ("Login failed"),
+			title: const Text ("Login failed"),
 			content: Column(
 				mainAxisSize: MainAxisSize.min,
-				children: [
+				children: const [
 					Text (
 						"Could not log into your account",
 						textScaleFactor: 1.5,
@@ -66,22 +69,22 @@ class LoginPage extends StatelessWidget {
 			),
 			actions: [
 				RaisedButton(
-					child: Text (
+					onPressed: () => Navigator.of(context).pop(),
+					child: const Text (
 						"Close",
 						style: TextStyle(color: Colors.white),
 					),
-					onPressed: Navigator.of(context).pop,
 				)
 			]
 		)
 	);
 
-	void login(BuildContext context) async {
+	Future<void> login(BuildContext context) async {
 		try {
 			loadingNotifier.value = true;
 			final account = await Auth.signIn(
 				() => Scaffold.of(context).showSnackBar(
-					SnackBar(
+					const SnackBar(
 						content: Text ("Please sign in with a Ramaz Google account"),
 					)
 				)
@@ -92,26 +95,27 @@ class LoginPage extends StatelessWidget {
 			}
 			await Services.of(context).services.login();
 			loadingNotifier.value = false;
-			Navigator.of(context).pushReplacementNamed(Routes.home);
+			await Navigator.of(context).pushReplacementNamed(Routes.home);
 		} on PlatformException catch (error) {
 			loadingNotifier.value = false;
 			if (
 				error.code == "sign_in_failed" || 
 				error.message == "Failed to get document because the client is offline."
-			) Scaffold.of(context).showSnackBar(
-				SnackBar(
-					content: Text ("No internet"),
-				)
-			); else {
-				print ("ERROR: ${error.code}");
+			) {
+				Scaffold.of(context).showSnackBar(
+					const SnackBar(
+						content: Text ("No internet"),
+					)
+				); 
+			} else {
 				showError(context);
 				rethrow;
 			}
-		} catch (error) {
+		} on Exception catch (error) {
 			loadingNotifier.value = false;
-			if (!(error is NoSuchMethodError))
-				print ("ERROR: ${error.code}");
-			showError(context);
+			if (error is! NoSuchMethodError) {
+				showError(context);
+			}
 			rethrow;
 		}
 	}

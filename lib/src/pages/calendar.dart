@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 
-import "drawer.dart";
-
 import "package:ramaz_admin/data.dart";
 import "package:ramaz_admin/models.dart";
 import "package:ramaz_admin/widgets.dart";
+
+import "drawer.dart";
 
 class CalendarPage extends StatelessWidget {
 	static const List<String> months = [
@@ -20,11 +20,11 @@ class CalendarPage extends StatelessWidget {
 
 	@override
 	Widget build(BuildContext context) => Scaffold(
-		appBar: AppBar(title: Text ("Calendar")),
+		appBar: AppBar(title: const Text ("Calendar")),
 		drawer: NavDrawer(),
 		body: Padding (
-			padding: EdgeInsets.symmetric(horizontal: 5),
-			child: ModelListener<CalendarModel, Null>(
+			padding: const EdgeInsets.symmetric(horizontal: 5),
+			child: ModelListener<CalendarModel, void>(
 				model: () => CalendarModel(),
 				builder: (CalendarModel model, _, __) => ListView(
 					children: [
@@ -57,41 +57,41 @@ class CalendarPage extends StatelessWidget {
 										),
 										body: StreamBuilder<DocumentSnapshot>(
 											stream: model.getStream(month),
-											builder: (_, AsyncSnapshot<DocumentSnapshot> snapshot) {
-												return !snapshot.hasData
-												? CircularProgressIndicator()
-												: SizedBox(
-													height: 300,
-													child: GridView.count(
-														physics: NeverScrollableScrollPhysics(),
-														shrinkWrap: true,
-														crossAxisCount: 7, 
-														children: [
-															for (final String weekday in weekdays) 
-																Center(child: Text (weekday)),
-															for (
-																final MapEntry<int, Day> entry in model.getCalendar(
-																	month,
-																	snapshot
-																)
-															) GestureDetector(
-																child: CalendarTile(
-																	date: entry?.key,
-																	day: entry?.value,
-																),
-																onTap: entry == null ? null : () async => model.setDay(
-																	month: month,
-																	date: entry.key,
-																	day: await DayBuilder.getDay(
-																		context: context, 
-																		month: months [month],
-																		date: entry.key + 1,
+											builder: (_, AsyncSnapshot<DocumentSnapshot> snapshot) => 
+												!snapshot.hasData
+													? const CircularProgressIndicator()
+													: SizedBox(
+														height: 300,
+														child: GridView.count(
+															physics: const NeverScrollableScrollPhysics(),
+															shrinkWrap: true,
+															crossAxisCount: 7, 
+															children: [
+																for (final String weekday in weekdays) 
+																	Center(child: Text (weekday)),
+																for (
+																	final MapEntry<int, Day> entry in model.getCalendar(
+																		month,
+																		snapshot
 																	)
+																) GestureDetector(
+																	onTap: entry == null ? null : () async => model.setDay(
+																		month: month,
+																		date: entry.key,
+																		day: await DayBuilder.getDay(
+																			context: context, 
+																			month: months [month],
+																			date: entry.key + 1,
+																		)
+																	),
+																	child: CalendarTile(
+																		date: entry?.key,
+																		day: entry?.value,
+																	),
 																)
-															)
-														]
+															]
+														)
 													)
-												);}
 										)
 									)
 							]

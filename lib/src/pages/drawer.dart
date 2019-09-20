@@ -19,17 +19,17 @@ class NavDrawer extends StatelessWidget {
 							child: Text (admin.name [0], textScaleFactor: 2)
 						)
 					),
-					SizedBox(height: 20),
-					Divider(),
-					SizedBox(height: 20),
+					const SizedBox(height: 20),
+					const Divider(),
+					const SizedBox(height: 20),
 					if (admin.scopes.contains(Scope.calendar)) ...[
 						ListTile(
-							title: Text ("Edit calendar"),
+							title: const Text ("Edit calendar"),
 							leading: Icon (Icons.today),
 							onTap: () => Navigator.of(context).pushReplacementNamed(Routes.calendar),
 						),
 						ListTile(
-							title: Text ("Manage custom schedules"),
+							title: const Text ("Manage custom schedules"),
 							leading: Icon(Icons.schedule),
 							onTap: () => Navigator.of(context).pushReplacementNamed(Routes.specials),
 						)
@@ -37,17 +37,17 @@ class NavDrawer extends StatelessWidget {
 
 					if (admin.scopes.contains(Scope.schedule))
 						ListTile(
-							title: Text ("Edit student schedules"),
+							title: const Text ("Edit student schedules"),
 							leading: Icon (Icons.account_circle),
 							onTap: () => Navigator.of(context).pushReplacementNamed(Routes.schedule),
 						),
 
 					ListTile(
-						title: Text ("Logout"),
+						title: const Text ("Logout"),
 						leading: Icon (Icons.lock_outline),
 						onTap: () async {
 							await Auth.signOut();
-							Navigator.of(context).pushReplacementNamed(Routes.login);
+							await Navigator.of(context).pushReplacementNamed(Routes.login);
 						}
 					)
 				]
