@@ -2,6 +2,7 @@ import "package:flutter/foundation.dart" show ChangeNotifier;
 
 import "package:ramaz_admin/data.dart";
 
+// ignore: prefer_mixin
 class SpecialBuilderModel with ChangeNotifier {
 	Special preset;
 	List<Range> _times = [];
@@ -30,12 +31,12 @@ class SpecialBuilderModel with ChangeNotifier {
 
 	int get numPeriods => _numPeriods;
 	set numPeriods (int value) {
-		if (value < numPeriods)
+		if (value < numPeriods) {
 			times.removeRange(value, times.length);
-		else {
-			if (_numPeriods == 0) times.add(
-				Range(Time(8, 00), Time(8, 50))
-			);
+		} else {
+			if (_numPeriods == 0) {
+				times.add(const Range(Time(8, 00), Time(8, 50)));
+			}
 			else {
 				final Range prev = times [value - 2];
 				times.add(
@@ -65,12 +66,11 @@ class SpecialBuilderModel with ChangeNotifier {
 		notifyListeners();
 	}
 
-	bool get ready => (
-		numPeriods != null && numPeriods > 0 && 
+	bool get ready => numPeriods != null && 
+		numPeriods > 0 && 
 		times.isNotEmpty &&
 		name != null && name.isNotEmpty &&
-		(preset == null || special != preset)
-	);
+		(preset == null || special != preset);
 
 	Special get special => Special(
 		name, times, 
@@ -92,7 +92,9 @@ class SpecialBuilderModel with ChangeNotifier {
 	}
 
 	void usePreset(Special special) {
-		if (special == null) return;
+		if (special == null) {
+			return;
+		}
 		preset = special;
 		_times = special.periods;
 		_skips = special.skip ?? [];
@@ -104,14 +106,10 @@ class SpecialBuilderModel with ChangeNotifier {
 		notifyListeners();
 	}
 
-	List<int> getIndices() {
-		final List<int> result = [];
-		int counter = 1;
-		for (int index = 0; index < _times.length; index++) {
-			if (homeroom == index || mincha == index) 
-				result.add(null);
-			else result.add(counter++);
-		}
-		return result;
-	}
+	List<int> getIndices() => [
+		for (int index; index < times.length; index++) 
+			homeroom == index || mincha == index
+				? null
+				: index + 1
+	];
 }

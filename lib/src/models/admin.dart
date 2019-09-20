@@ -3,6 +3,7 @@ import "package:flutter/foundation.dart" show ChangeNotifier;
 import "package:ramaz_admin/data.dart";
 import "package:ramaz_admin/services.dart";
 
+// ignore: prefer_mixin
 class AdminModel with ChangeNotifier {
 	final Reader reader;
 
@@ -17,14 +18,18 @@ class AdminModel with ChangeNotifier {
 	}
 
 	void addSpecial(Special special) {
-		if (special == null) return;
+		if (special == null) {
+			return;
+		}
 		admin.specials.add(special);
 		notifyListeners();
 		save();
 	}
 
 	void replaceSpecial(int index, Special special) {
-		if (special == null) return;
+		if (special == null) {
+			return;
+		}
 		admin.specials [index] = special;
 		notifyListeners();
 		save();

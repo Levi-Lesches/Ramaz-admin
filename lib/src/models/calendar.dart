@@ -1,12 +1,13 @@
+import "dart:async";
 import "package:flutter/foundation.dart" show required, ChangeNotifier;
 import "package:flutter/widgets.dart" show AsyncSnapshot;
-import "dart:async";
 
-import "package:cloud_firestore/cloud_firestore.dart" as FB;
+import "package:cloud_firestore/cloud_firestore.dart" as fb;
 
 import "package:ramaz_admin/data.dart";
 import "package:ramaz_admin/services.dart";
 
+// ignore: prefer_mixin
 class CalendarModel with ChangeNotifier {
 	static const int daysInMonth = 7 * 5;
 	static final int currentMonth = DateTime.now().month;
@@ -20,17 +21,19 @@ class CalendarModel with ChangeNotifier {
 		return result;
 	}
 
-	final List<Stream<FB.DocumentSnapshot>> streams = List.filled(12, null);
-	final List<AsyncSnapshot<FB.DocumentSnapshot>> snapshots = List.filled(12, null);
+	final List<Stream<fb.DocumentSnapshot>> streams = List.filled(12, null);
+	final List<AsyncSnapshot<fb.DocumentSnapshot>> snapshots = 
+		List.filled(12, null);
 	final List<List<MapEntry<int, Day>>> data = List.filled(12, null);
 	final List<int> years = List.filled(12, null);
 
 	Iterable<MapEntry<int, Day>> getCalendar(
 		int month, 
-		AsyncSnapshot<FB.DocumentSnapshot> snapshot
+		AsyncSnapshot<fb.DocumentSnapshot> snapshot
 	) {
-		if (snapshots [month] == snapshot)
+		if (snapshots [month] == snapshot) {
 			return data [month];
+		}
 
 		snapshots [month] = snapshot;
 		final List<MapEntry<int, Day>> newData = getData(month);
@@ -38,10 +41,12 @@ class CalendarModel with ChangeNotifier {
 		return newData;
 	}
 
-	Stream<FB.DocumentSnapshot> getStream(int index) {
-		if (streams [index] != null) return streams [index];
+	Stream<fb.DocumentSnapshot> getStream(int index) {
+		if (streams [index] != null) {
+			return streams [index];
+		}
 
-		final Stream<FB.DocumentSnapshot> stream = Firestore.getCalendar(index + 1);
+		final Stream<fb.DocumentSnapshot> stream = Firestore.getCalendar(index + 1);
 		streams [index] = stream;
 		return stream;
 	}
@@ -52,7 +57,7 @@ class CalendarModel with ChangeNotifier {
 		_currentYear = year;
 		for (int index = 0; index < 12; index++) {
 			data [index] = getData(index);
-			years [index] = getYear(index, true);
+			years [index] = getYear(index, force: true);
 		}
 		notifyListeners();
 	}
@@ -61,15 +66,17 @@ class CalendarModel with ChangeNotifier {
 		@required int month,
 		@required int date,
 		@required Day day,
-	}) async {
-		if (day == null) return;
+	}) {
+		if (day == null) {
+			return;
+		}
 		final List<MapEntry<int, Day>> entries = data [month];
-		Map<int, Day> calendarAsMap = Map.fromEntries(
+		final Map<int, Day> calendarAsMap = Map.fromEntries(
 			entries.where(
 				(MapEntry<int, Day> entry) => entry != null
 			)
 		);
-		List<Day> calendar = mapToList(calendarAsMap);
+		final List<Day> calendar = mapToList(calendarAsMap);
 		calendar [date] = day;
 		Firestore.saveCalendar(
 			month + 1, 
@@ -84,19 +91,26 @@ class CalendarModel with ChangeNotifier {
 		);
 	}
 
-	int getYearData(month) {
+	int getYearData(int month) {
 		if (currentMonth < 7) {
-			if (month < 7) return currentYear - 1;
-			else return currentYear;
+			if (month < 7) {
+				return currentYear - 1;
+			} else {
+				return currentYear;
+			}
 		} else {
-			if (month < 7) return currentYear + 1;
-			else return currentYear;
+			if (month < 7) {
+				return currentYear + 1;
+			} else {
+				return currentYear;
+			}
 		}
 	}
 
-	int getYear(int month, [bool force = false]) {
-		if (years [month] != null && !force) 
+	int getYear(int month, {bool force = false}) {
+		if (years [month] != null && !force) {
 			return years [month];
+		}
 
 		final int result = getYearData(month);
 		years [month] = result;
@@ -104,18 +118,20 @@ class CalendarModel with ChangeNotifier {
 	}
 
 	List<MapEntry<int, Day>> getData(int month) {
-		final List<MapEntry<int, Day>> result = [];
 		final List<Day> days = Day.getCalendar(snapshots [month].data.data);
 		final int selectedYear = getYear(month);
 		final DateTime firstOfMonth = DateTime(selectedYear, month + 1, 1);
 		final int firstDayOfWeek = firstOfMonth.weekday;
-		final int weekday = firstDayOfWeek == 7
-			? 0 : firstDayOfWeek - 1;
-		for (int day = 0; day < weekday; day++)
-			result.add(null);
-		result.addAll(days.asMap().entries);
-		for (int day = weekday + days.length; day < daysInMonth; day++)
-			result.add(null);
-		return result;
+		final int weekday = firstDayOfWeek == 7 ? 0 : firstDayOfWeek - 1;
+
+		return [
+			for (int day = 0; day < weekday; day++) 
+				null,
+
+			...days.asMap().entries,
+
+			for (int day = weekday + days.length; day < daysInMonth; day++)
+				null,
+		];
 	}
 }

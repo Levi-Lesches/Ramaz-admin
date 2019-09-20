@@ -1,10 +1,11 @@
 import "package:flutter/foundation.dart" show ChangeNotifier;
 
-import "admin.dart";
-
 import "package:ramaz_admin/data.dart";
 import "package:ramaz_admin/services.dart";
 
+import "admin.dart";
+
+// ignore: prefer_mixin
 class DayBuilderModel with ChangeNotifier {
 	final AdminModel admin;
 	Letter _letter;
@@ -28,15 +29,16 @@ class DayBuilderModel with ChangeNotifier {
 
 	Special get special => _special;
 	set special (Special value) {
-		if (value == null) return;
+		if (value == null) {
+			return;
+		}
 		_special = value;
 		if(
-			!presetSpecials.any(
-				(Special preset) => preset.name == value.name
-			) && !userSpecials.any(
-				(Special preset) => preset.name == value.name
-			)
-		) saveSpecial(value);
+			!presetSpecials.any((Special preset) => preset.name == value.name) && 
+			!userSpecials.any((Special preset) => preset.name == value.name)
+		) {
+			saveSpecial(value);
+		}
 
 		notifyListeners();
 	}
