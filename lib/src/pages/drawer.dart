@@ -6,6 +6,9 @@ import "package:ramaz_admin/services.dart";
 import "package:ramaz_admin/widgets.dart";
 
 class NavDrawer extends StatelessWidget {
+	static VoidCallback pushRoute(BuildContext context, String route) => 
+		() => Navigator.of(context).pushReplacementNamed(route);
+
 	@override
 	Widget build(BuildContext context) {
 		final Admin admin = Services.of(context).admin.admin;
@@ -26,12 +29,12 @@ class NavDrawer extends StatelessWidget {
 						ListTile(
 							title: const Text ("Edit calendar"),
 							leading: Icon (Icons.today),
-							onTap: () => Navigator.of(context).pushReplacementNamed(Routes.calendar),
+							onTap: pushRoute(context, Routes.calendar),
 						),
 						ListTile(
 							title: const Text ("Manage custom schedules"),
 							leading: Icon(Icons.schedule),
-							onTap: () => Navigator.of(context).pushReplacementNamed(Routes.specials),
+							onTap: pushRoute(context, Routes.specials),
 						)
 					],
 
@@ -39,7 +42,14 @@ class NavDrawer extends StatelessWidget {
 						ListTile(
 							title: const Text ("Edit student schedules"),
 							leading: Icon (Icons.account_circle),
-							onTap: () => Navigator.of(context).pushReplacementNamed(Routes.schedule),
+							onTap: pushRoute(context, Routes.schedule),
+						),
+
+					if (admin.scopes.contains(Scope.publications))
+						ListTile(
+							title: const Text("Manage publication"),
+							leading: Icon(Icons.new_releases),
+							onTap: pushRoute(context, Routes.publications),
 						),
 
 					ListTile(

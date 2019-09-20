@@ -5,26 +5,27 @@ import "package:firebase_storage/firebase_storage.dart";
 class CloudStorage {
 	static final StorageReference root = FirebaseStorage().ref();
 
-	final Directory dir;
+	final Directory dir, publicationDir;
 	final String publication;
 
 	CloudStorage({
 		@required String path, 
 		@required this.publication
 	}) : 
-		dir = Directory("$path/publications");
+		dir = Directory("$path/publications")
+			..createSync(recursive: true),
+		publicationDir = Directory("$path/publications/$publication")
+			..createSync(recursive: true);
 
 	String getPath(String path) => "${dir.path}/$path";
 
 	Future<Map<String, String>> get metadata async => 
-		(await root.child(publication).getMetadata()).customMetadata;
+		(await root.child("$publication/issues.txt").getMetadata()).customMetadata;
 
-	Future<void> getImage() async {
-		final File file = File(getPath("$publication.png"));
-		if (!file.existsSync()) {
-			await root.child("$publication/$publication.png").writeToFile(file).future;
-		}
-	}
+	Future<void> getImage() => root
+		.child("$publication/$publication.png")
+		.writeToFile(File(imagePath))
+		.future;
 
 	Future<void> getIssue(String issue) => 
 		root.child(issue).writeToFile(File(getPath(issue))).future;
@@ -41,6 +42,8 @@ class CloudStorage {
 		);
 
 	Future<void> deleteIssue(String issue) => root.child(issue).delete();
+
+	String get imagePath => getPath("$publication.png");
 
 	void deleteLocal() => dir.deleteSync(recursive: true);
 }

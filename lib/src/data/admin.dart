@@ -2,16 +2,18 @@ import "package:flutter/foundation.dart";
 
 import "times.dart";
 
-enum Scope {calendar, schedule}
+enum Scope {calendar, schedule, publications}
 
 const Map<String, Scope> stringToScope = <String, Scope>{
 	"calendar": Scope.calendar,
 	"schedule": Scope.schedule,
+	"publications": Scope.publications,
 };
 
 const Map<Scope, String> scopeToString = <Scope, String>{
 	Scope.calendar: "calendar",
 	Scope.schedule: "schedule",
+	Scope.publications: "publications",
 };
 
 @immutable

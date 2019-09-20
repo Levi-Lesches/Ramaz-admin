@@ -11,7 +11,7 @@ class PublicationModel with ChangeNotifier {
 	final CloudStorage storage;
 
 	Publication publication;
-	bool loading = true;
+	bool loading = false;
 	String downloadingIssue;
 
 	PublicationModel(ServicesCollection services) :
@@ -22,7 +22,7 @@ class PublicationModel with ChangeNotifier {
 
 	Future<void> setup() async {
 		publication = Publication(
-			name: await Auth.publicationName, 
+			name: storage.publication, 
 			// We want to augment the set occasionally
 			// ignore: prefer_const_literals_to_create_immutables
 			downloadedIssues: <String>{},
@@ -30,7 +30,13 @@ class PublicationModel with ChangeNotifier {
 				Map<String, String>.from(await storage.metadata),
 			)
 		);
+		await storage.getImage();
+		notifyListeners();
 	}
+
+	String get imagePath => storage.imagePath;
+
+	String get publicationName => storage.publication;
 
 	Future<void> save() async {
 		if (!loading) {
@@ -55,14 +61,12 @@ class PublicationModel with ChangeNotifier {
 
 	Publication buildPublication({
 		String description,
-		String imagePath,
-		List<String> issues,	
+		Set<String> issues,	
 	}) => Publication(
 		name: publication.name,
 		downloadedIssues: publication.downloadedIssues,
 		metadata: PublicationMetadata(
 			description: description ?? publication.metadata.description,
-			imagePath: imagePath ?? publication.metadata.imagePath,
 			issues: issues ?? publication.metadata.issues,
 		)
 	);
@@ -76,7 +80,7 @@ class PublicationModel with ChangeNotifier {
 		loading = true;
 		notifyListeners();
 		await storage.uploadImage(file);
-		await save();
+		File(imagePath).deleteSync();
 		await storage.getImage();
 		loading = false;
 		notifyListeners();
@@ -90,10 +94,9 @@ class PublicationModel with ChangeNotifier {
 				break;
 			}
 		}
-		assert (
-			toRemove != null, 
-			"Cannot find $issue to remove. Saved issues: ${publication.downloadedIssues}"
-		);
+		if (toRemove != null) {
+			return; 
+		}
 		publication.downloadedIssues.remove(toRemove);
 	}
 
@@ -113,7 +116,10 @@ class PublicationModel with ChangeNotifier {
 		final DateTime now = DateTime.now();
 		final String issue = "${publication.name}/${now.year}_${now.month}_${now.day}.pdf";
 		await storage.uploadIssue(issue, file);
-		publication.metadata.issues.add(issue);
+		publication = buildPublication(issues: {
+			...publication.metadata.issues,
+			issue,
+		});
 		await save();
 	}
 
@@ -122,7 +128,13 @@ class PublicationModel with ChangeNotifier {
 		notifyListeners();
 		await storage.deleteIssue(issue);
 		deleteSavedIssue(issue);
-		publication.metadata.issues.remove(issue);
+		publication = buildPublication(
+			issues: {
+				for (final String otherIssue in publication.metadata.issues)
+					if (otherIssue != issue)
+						otherIssue
+			}
+		);
 		await save();
 	}
 }

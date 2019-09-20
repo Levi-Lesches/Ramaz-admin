@@ -6,12 +6,12 @@ class PublicationMetadata {
 		final Map<int, Map<int, List<String>>> result = {};
 		for (final String issue in issues) {
 			final List<String> parts = issue.substring(
-				issue.lastIndexOf("/"),
+				issue.lastIndexOf("/") + 1,
 				issue.length - 4,
 			).split("_");
 			final int year = int.parse(parts [0]);
 			final int month = int.parse(parts [1]);
-			final Map<int, List<String>> issuesByYear = result [year] ?? [];
+			final Map<int, List<String>> issuesByYear = result [year] ?? {};
 			if (issuesByYear.isEmpty) {
 				result [year] = issuesByYear;
 			}
@@ -28,25 +28,21 @@ class PublicationMetadata {
 	}
 
 	final String description;
-	final String imagePath;
 	final Set<String> issues;
 	final Map<int, Map<int, List<String>>> issuesByMonth;
 
 	PublicationMetadata({
 		@required this.description,
-		@required this.imagePath,
 		@required this.issues,
 	}) : issuesByMonth = getIssuesByMonth(issues);
 
 	PublicationMetadata.fromJson(Map<String, String> json) : 
 		description = json ["description"],
-		imagePath = json ["imagePath"],
 		issues = Set.of(json ["issues"].split(", ")),
 		issuesByMonth = getIssuesByMonth(Set.of(json ["issues"].split(", ")));
 
 	Map<String, String> toJson() => {
 		"description": description,
-		"imagePath": imagePath,
 		"issues": issues.join(", ")
 	};
 }

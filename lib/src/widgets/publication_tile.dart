@@ -38,8 +38,10 @@ class PublicationMonthsList extends StatelessWidget {
 				) ExpansionPanelRadio(
 					canTapOnHeader: true,
 					value: "${yearEntry.key}-${monthEntry.key}",
-					headerBuilder: (_, __) => Text (
-						"${months [monthEntry.key]} ${yearEntry.key}"
+					headerBuilder: (_, __) => ListTile(
+						title: Text (
+							"${months [monthEntry.key]} ${yearEntry.key}"
+						),
 					),
 					body: Column (
 						children: [

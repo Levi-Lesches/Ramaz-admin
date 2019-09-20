@@ -10,10 +10,15 @@ class HomePage extends StatelessWidget {
 		body: Center (
 			child: Column(
 				mainAxisSize: MainAxisSize.min,
-				children: const [
-					Text ("Swipe from the left for options", textScaleFactor: 1.3),
-					SizedBox(height: 10),
-					Text ("⟵", textScaleFactor: 2)
+				children: [
+					const Text ("Open the menu for options", textScaleFactor: 1.3),
+					const SizedBox(height: 10),
+					Builder(
+						builder: (BuildContext context) => FlatButton (
+							onPressed: () => Scaffold.of(context).openDrawer(),
+							child: const Text("⟵", textScaleFactor: 2),
+						),
+					)
 				]
 			),
 		)

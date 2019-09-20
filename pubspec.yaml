@@ -24,7 +24,6 @@ dependencies:
   google_sign_in: any
   path_provider: any
   firebase_storage: any
-  image_picker: any
   file_picker: any
   flutter_plugin_pdf_viewer: any
 
