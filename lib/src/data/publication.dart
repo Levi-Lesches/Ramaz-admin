@@ -12,12 +12,14 @@ class PublicationMetadata {
 			final int year = int.parse(parts [0]);
 			final int month = int.parse(parts [1]);
 			final Map<int, List<String>> issuesByYear = result [year] ?? [];
-			if (issuesByYear.isEmpty)
+			if (issuesByYear.isEmpty) {
 				result [year] = issuesByYear;
+			}
 
 			final List<String> issuesByMonth = issuesByYear [month] ?? [];
-			if (issuesByMonth.isEmpty)
+			if (issuesByMonth.isEmpty) {
 				issuesByYear [month] = issuesByMonth;
+			}
 
 			issuesByMonth.add(issue);
 		}

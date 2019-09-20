@@ -29,8 +29,8 @@ class Time {
 	const Time(this.hour, this.minute);
 
 	Time.fromJson(Map<String, dynamic> json) :
-		hour = json ["hour"] as int,
-		minute = json ["minutes"] as int;
+		hour = json ["hour"],
+		minute = json ["minutes"];
 
 	Map<String, dynamic> toJson() => {
 		"hour": hour,
@@ -41,19 +41,20 @@ class Time {
 	int get hashCode => "$hour:$minute".hashCode;
 
 	@override 
-	operator == (dynamic other) => hour == other.hour && minute == other.minute;
+	bool operator == (dynamic other) => 
+		hour == other.hour && minute == other.minute;
 
-	operator < (dynamic other) => hour == other.hour
+	bool operator < (dynamic other) => hour == other.hour
 		? minute < other.minute
 		: hour < other.hour;
 
-	operator <= (dynamic other) => this == other || this < other;
+	bool operator <= (dynamic other) => this == other || this < other;
 
-	operator > (dynamic other) => hour == other.hour
+	bool operator > (dynamic other) => hour == other.hour
 		? minute > other.minute
 		: hour > other.hour;
 
-	operator >= (dynamic other) => this == other || this > other;
+	bool operator >= (dynamic other) => this == other || this > other;
 }
 
 @immutable
@@ -96,20 +97,24 @@ class Special {
 				Range.fromJson(Map<String, dynamic>.from(period))
 		],
 		skip = List<int>.from(json ["skip"]),
-		name = json ["name"] as String,
-		mincha = json ["mincha"] as int,
-		homeroom = json ["homeroom"] as int;
+		name = json ["name"],
+		mincha = json ["mincha"],
+		homeroom = json ["homeroom"];
 
 	static bool deepEquals<E>(List<E> a, List<E> b) {
-		if (a.length != b.length) return false;
+		if (a.length != b.length) {
+			return false;
+		}
 		for (int index = 0; index < a.length; index++) {
-			if (a [index] != b [index]) return false;
+			if (a [index] != b [index]) { 
+				return false;
+			}
 		}
 		return true;
 	}
 
 	@override
-	operator == (Object other) => other == null ? false : other is Special && 
+	bool operator == (Object other) =>other is Special && 
 		!(other.name == null || name == null) &&
 		deepEquals<Range> (other.periods ?? [], periods ?? []) && 
 		deepEquals<int>(other.skip ?? [], skip ?? []) &&
@@ -187,7 +192,7 @@ class Special {
 			Range (Time (1, 35), Time (2, 05))
 		],
 		mincha: 8,
-		skip: const [6, 7, 8]
+		skip: [6, 7, 8]
 	);
 
 	static const Special friday = Special (
@@ -358,9 +363,10 @@ class Special {
 class Day {
 	static List<Day> getCalendar(Map<String, dynamic> json) {
 		final List<Day> result = List.filled(31, null, growable: true);
-		for (final MapEntry<String, dynamic> entry in json.entries)
+		for (final MapEntry<String, dynamic> entry in json.entries) {
 			result [int.parse(entry.key) - 1] = 
 				Day.fromJson(Map<String, dynamic>.from(entry.value));
+		}
 		result.removeWhere(
 			(Day day) => day == null
 		);

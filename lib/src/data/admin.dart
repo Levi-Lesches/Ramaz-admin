@@ -4,12 +4,12 @@ import "times.dart";
 
 enum Scope {calendar, schedule}
 
-const Map<String, Scope> stringToScope = {
+const Map<String, Scope> stringToScope = <String, Scope>{
 	"calendar": Scope.calendar,
 	"schedule": Scope.schedule,
 };
 
-const Map<Scope, String> scopeToString = {
+const Map<Scope, String> scopeToString = <Scope, String>{
 	Scope.calendar: "calendar",
 	Scope.schedule: "schedule",
 };
@@ -28,25 +28,25 @@ class Admin {
 	});
 
 	Admin.fromJson(Map<String, dynamic> json) :
-		email = json ["email"] as String,
-		name  = json ["name"] as String,
-		scopes = [
+		email = json ["email"],
+		name  = json ["name"],
+		scopes = <Scope>[
 			for (dynamic scope in json ["scopes"])
 				stringToScope [scope]
 		],
-		specials = [
+		specials = <Special>[
 			for (dynamic special in json ["specials"])
 				Special.fromJson (Map<String, dynamic>.from(special))
 		];
 
-	Map<String, dynamic> toJson() => {
+	Map<String, dynamic> toJson() => <String, dynamic>{
 		"email": email,
 		"name": name,
-		"scopes": [
+		"scopes": <String>[
 			for (final Scope scope in scopes)
 				scopeToString [scope]
 		],
-		"specials": [
+		"specials": <Map<String, dynamic>>[
 			for (final Special special in specials)
 				special.toJson(),
 		]
