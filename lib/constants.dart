@@ -6,6 +6,7 @@ class Routes {
 	static const String login = "login";
 	static const String home = "home";
 	static const String specials = "specials";
+	static const String publications = "publications";
 }
 
 class RamazColors {

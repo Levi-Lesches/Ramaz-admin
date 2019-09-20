@@ -13,7 +13,7 @@ class PublicationModel with ChangeNotifier {
 	bool loading = true;
 	String downloadingIssue;
 
-	PublicationModel({@required ServicesCollection services}) :
+	PublicationModel(ServicesCollection services) :
 		storage = services.storage 
 	{
 		setup();
