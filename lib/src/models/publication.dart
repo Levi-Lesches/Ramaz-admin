@@ -14,36 +14,20 @@ class PublicationModel with ChangeNotifier {
 	bool loading = false;
 	String downloadingIssue;
 
-	PublicationModel(ServicesCollection services) :
-		storage = services.storage 
-	{
-		setup();
-	}
+	PublicationModel(ServicesCollection services, this.publication) :
+		storage = services.storage;
 
-	Future<void> setup() async {
-		publication = Publication(
-			name: storage.publication, 
-			// We want to augment the set occasionally
-			// ignore: prefer_const_literals_to_create_immutables
-			downloadedIssues: <String>{},
-			metadata: PublicationMetadata.fromJson(
-				Map<String, String>.from(await storage.metadata),
-			)
-		);
-		await storage.getImage();
-		notifyListeners();
-	}
-
-	String get imagePath => storage.imagePath;
-
-	String get publicationName => storage.publication;
+	String get imagePath => storage.getImagePath(publication.name);
 
 	Future<void> save() async {
 		if (!loading) {
 			loading = true;
 			notifyListeners();
 		}
-		await storage.uploadMetadata(publication.metadata.toJson());
+		await storage.uploadMetadata(
+			publication.name, 
+			publication.metadata.toJson()
+		);
 		loading = false;
 		notifyListeners();
 	}
@@ -79,9 +63,9 @@ class PublicationModel with ChangeNotifier {
 	Future<void> replaceImage(File file) async {
 		loading = true;
 		notifyListeners();
-		await storage.uploadImage(file);
+		await storage.uploadImage(publication.name, file);
 		File(imagePath).deleteSync();
-		await storage.getImage();
+		await storage.getImage(publication.name);
 		loading = false;
 		notifyListeners();
 	}

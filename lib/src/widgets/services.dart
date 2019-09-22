@@ -9,10 +9,12 @@ class Services extends InheritedWidget {
 		context.inheritFromWidgetOfExactType(Services);
 
 	final Reader reader;
+	final CloudStorage storage;
 	final ServicesCollection services;
 
 	Services({@required this.services, @required Widget child}) : 
 		reader = services.reader,
+		storage = services.storage,
 		super (child: child);
 
 	AdminModel get admin => services.admin;

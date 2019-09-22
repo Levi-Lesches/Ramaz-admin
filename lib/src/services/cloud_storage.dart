@@ -5,45 +5,53 @@ import "package:firebase_storage/firebase_storage.dart";
 class CloudStorage {
 	static final StorageReference root = FirebaseStorage().ref();
 
-	final Directory dir, publicationDir;
-	final String publication;
+	final Directory dir;
 
 	CloudStorage({
 		@required String path, 
-		@required this.publication
 	}) : 
 		dir = Directory("$path/publications")
-			..createSync(recursive: true),
-		publicationDir = Directory("$path/publications/$publication")
 			..createSync(recursive: true);
 
 	String getPath(String path) => "${dir.path}/$path";
 
-	Future<Map<String, String>> get metadata async => 
-		(await root.child("$publication/issues.txt").getMetadata()).customMetadata;
+	Future<List<String>> get publications async => 
+		(await root.child("issues.txt").getMetadata())
+		.customMetadata ["names"].split(", ");
 
-	Future<void> getImage() => root
+	Future<Map<String, String>> getMetadata(String publication) async {
+		await getImage(publication);
+		final Directory publicationDir = Directory(getPath(publication));
+		if (!publicationDir.existsSync()) {
+			publicationDir.createSync(recursive: true);
+		}
+		return (await root.child("$publication/issues.txt").getMetadata()).customMetadata;
+	}
+
+	Future<void> getImage(String publication) => root
 		.child("$publication/$publication.png")
-		.writeToFile(File(imagePath))
+		.writeToFile(File(getImagePath(publication)))
 		.future;
 
 	Future<void> getIssue(String issue) => 
 		root.child(issue).writeToFile(File(getPath(issue))).future;
 
-	Future<void> uploadImage(File file) => 
+	Future<void> uploadImage(String publication, File file) => 
 		root.child("$publication/$publication.png").putFile(file).onComplete;
 
 	Future<void> uploadIssue(String issue, File file) => 
 		root.child(issue).putFile(file).onComplete;
 
-	Future<void> uploadMetadata(Map<String, String> metadata) =>
-		root.child("$publication/issues.txt").updateMetadata(
-			StorageMetadata(customMetadata: metadata)
-		);
+	Future<void> uploadMetadata(
+		String publication, 
+		Map<String, String> metadata
+	) => root.child("$publication/issues.txt").updateMetadata(
+		StorageMetadata(customMetadata: metadata)
+	);
 
 	Future<void> deleteIssue(String issue) => root.child(issue).delete();
 
-	String get imagePath => getPath("$publication.png");
+	String getImagePath(String publication) => getPath("$publication.png");
 
 	void deleteLocal() => dir.deleteSync(recursive: true);
 }

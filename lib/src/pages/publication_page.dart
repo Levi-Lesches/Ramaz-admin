@@ -4,21 +4,22 @@ import "package:flutter/material.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart";
 
+import "package:ramaz_admin/data.dart";
 import "package:ramaz_admin/models.dart";
 import "package:ramaz_admin/widgets.dart";
 
-import "drawer.dart";
-
 class PublicationPage extends StatelessWidget {
 	final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+	final Publication publication;
+
+	PublicationPage(this.publication);
 
 	@override
 	Widget build(BuildContext context) => ModelListener<PublicationModel>(
-		model: () => PublicationModel(Services.of(context).services),
+		model: () => PublicationModel(Services.of(context).services, publication),
 		builder: (BuildContext context, PublicationModel model, Widget _) => Scaffold(
 			key: scaffoldKey,
-			appBar: AppBar(title: Text (model.publicationName)),
-			drawer: NavDrawer(),
+			appBar: AppBar(title: Text (model.publication.name)),
 			floatingActionButton: FloatingActionButton(
 				onPressed: () async {
 					final File file = await FilePicker.getFile(

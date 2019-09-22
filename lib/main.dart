@@ -63,7 +63,6 @@ class AdminConsole extends StatelessWidget {
 				Routes.home: (_) => HomePage(),
 				Routes.specials: (_) => SpecialPage(),
 				Routes.publications: (_) => PublicationsManagerPage(),
-				Routes.publicationPage: (_) => PublicationPage(),
 			}
 		)
 	);

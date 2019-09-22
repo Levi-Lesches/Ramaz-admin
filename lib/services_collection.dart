@@ -14,7 +14,6 @@ class ServicesCollection {
 		admin = AdminModel(reader);
 		storage = CloudStorage(
 			path: path, 
-			publication: await Auth.publicationName,
 		);
 	}
 
