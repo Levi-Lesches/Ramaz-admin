@@ -45,9 +45,15 @@ class NavDrawer extends StatelessWidget {
 							onTap: pushRoute(context, Routes.schedule),
 						),
 
-					if (admin.scopes.contains(Scope.publications))
+					if (admin.publication != null)
 						ListTile(
 							title: const Text("Manage publication"),
+							leading: Icon(Icons.new_releases),
+							onTap: pushRoute(context, Routes.publicationPage),
+						)
+					else if (admin.scopes.contains(Scope.publications))
+						ListTile(
+							title: const Text("Manage publications"),
 							leading: Icon(Icons.new_releases),
 							onTap: pushRoute(context, Routes.publications),
 						),

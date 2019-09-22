@@ -18,20 +18,22 @@ const Map<Scope, String> scopeToString = <Scope, String>{
 
 @immutable
 class Admin {
-	final String email, name;
+	final String email, name, publication;
 	final List<Scope> scopes;
 	final List<Special> specials;
 
 	const Admin ({
-		this.email, 
-		this.name, 
-		this.scopes, 
-		this.specials
+		@required this.email, 
+		@required this.name, 
+		@required this.scopes, 
+		@required this.specials,
+		@required this.publication,
 	});
 
 	Admin.fromJson(Map<String, dynamic> json) :
 		email = json ["email"],
 		name  = json ["name"],
+		publication = json ["publication"],
 		scopes = <Scope>[
 			for (dynamic scope in json ["scopes"])
 				stringToScope [scope]
@@ -44,6 +46,7 @@ class Admin {
 	Map<String, dynamic> toJson() => <String, dynamic>{
 		"email": email,
 		"name": name,
+		"publication": publication,
 		"scopes": <String>[
 			for (final Scope scope in scopes)
 				scopeToString [scope]

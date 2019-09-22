@@ -7,6 +7,7 @@ class Routes {
 	static const String home = "home";
 	static const String specials = "specials";
 	static const String publications = "publications";
+	static const String publicationPage = "publication_page";
 }
 
 class RamazColors {
