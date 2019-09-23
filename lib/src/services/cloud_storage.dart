@@ -21,11 +21,11 @@ class CloudStorage {
 		.customMetadata ["names"].split(", ");
 
 	Future<Map<String, String>> getMetadata(String publication) async {
-		await getImage(publication);
 		final Directory publicationDir = Directory(getPath(publication));
 		if (!publicationDir.existsSync()) {
 			publicationDir.createSync(recursive: true);
 		}
+		await getImage(publication);
 		return (await root.child("$publication/issues.txt").getMetadata()).customMetadata;
 	}
 
@@ -74,7 +74,7 @@ class CloudStorage {
 
 	Future<void> deleteIssue(String issue) => root.child(issue).delete();
 
-	String getImagePath(String publication) => getPath("$publication.png");
+	String getImagePath(String publication) => getPath("$publication/$publication.png");
 
 	void deleteLocal() => dir.deleteSync(recursive: true);
 }

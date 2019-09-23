@@ -17,7 +17,7 @@ class Auth {
 		(await currentUser)?.email;
 
 	static Future<String> get publicationName async => 
-		(await (await currentUser)?.getIdToken())?.claims ["club"];
+		(await (await currentUser)?.getIdToken())?.claims ["publication"];
 
 	static Future<bool> get ready async => await currentUser != null;
 

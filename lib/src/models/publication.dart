@@ -15,7 +15,26 @@ class PublicationModel with ChangeNotifier {
 	String downloadingIssue;
 
 	PublicationModel(ServicesCollection services, this.publication) :
-		storage = services.storage;
+		storage = services.storage 
+	{
+		if (publication == null) {
+			Auth.publicationName.then(
+				(String name) async {
+					assert (name != null, "No publication registered to user");
+					publication = Publication(
+						name: name,
+						// ignore: prefer_const_literals_to_create_immutables
+						downloadedIssues: {},
+						metadata:  PublicationMetadata.fromJson(
+							await storage.getMetadata(name)
+						)
+					);
+					await storage.getImage(name);
+					notifyListeners();
+				}
+			);
+		}
+	}
 
 	String get imagePath => storage.getImagePath(publication.name);
 

@@ -41,7 +41,7 @@ class PublicationCardState extends State<PublicationCard> {
 						onTap: () => Navigator.of(context).push(
 							MaterialPageRoute(
 								builder: (_) => PublicationPage(
-									Publication(
+									publication: Publication(
 										name: widget.publication,
 										// We want this to be mutable
 										// ignore: prefer_const_literals_to_create_immutables
