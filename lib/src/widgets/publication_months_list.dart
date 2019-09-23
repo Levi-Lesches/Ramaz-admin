@@ -1,5 +1,11 @@
 import "package:flutter/material.dart";
 
+enum IssueAction {
+	delete,
+	view,
+	replace,
+}
+
 class PublicationMonthsList extends StatelessWidget {
 	static const List<String> months = [
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
@@ -47,16 +53,31 @@ class PublicationMonthsList extends StatelessWidget {
 						children: [
 							for (final String issue in monthEntry.value)
 								ListTile(
-									leading: IconButton (
-										icon: Icon (Icons.remove_circle_outline),
-										onPressed: () => deleteIssue(issue),
-									),
 									title: Text (getDateAsString(issue)),
-									onTap: () => replaceIssue(issue),
-									trailing: IconButton (
-										icon: Icon(Icons.keyboard_arrow_right),
-										onPressed: () => openIssue(issue),
-									),
+									trailing: PopupMenuButton<IssueAction>(
+										icon: Icon(Icons.more_vert),
+										onSelected: (IssueAction action) {
+											switch (action) {
+												case IssueAction.delete: deleteIssue(issue); break;
+												case IssueAction.replace: replaceIssue(issue); break;
+												case IssueAction.view: openIssue(issue); break;
+											}
+										},
+										itemBuilder: (BuildContext context) => const [
+											PopupMenuItem<IssueAction>(
+												value: IssueAction.view,
+												child: Text("View issue"),
+											),
+											PopupMenuItem(
+												value: IssueAction.replace,
+												child: Text("Replace issue"),
+											),
+											PopupMenuItem(
+												value: IssueAction.delete,
+												child: Text("Delete issue"),
+											)
+										]
+									)
 								)
 						]
 					)
