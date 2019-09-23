@@ -1,4 +1,5 @@
 import "dart:io";
+import "dart:typed_data" show Uint8List;
 import "package:flutter/foundation.dart";
 import "package:firebase_storage/firebase_storage.dart";
 
@@ -26,6 +27,28 @@ class CloudStorage {
 			publicationDir.createSync(recursive: true);
 		}
 		return (await root.child("$publication/issues.txt").getMetadata()).customMetadata;
+	}
+
+	Future<void> createPublication(String publication) async {
+		final List<String> publicationsList = await publications;
+		if (publicationsList.contains(publication)) {
+			return;  // no further work needed
+		}
+		await root.child("issues.txt").updateMetadata(
+			StorageMetadata(
+				customMetadata: {
+					"names": [
+						...await publications,
+						publication
+					].join(", ")
+				}
+			)
+		);
+		final String metadataPath = "$publication/issues.txt";
+		await root
+			.child(metadataPath)
+			.putData(Uint8List.fromList([]))
+			.onComplete;
 	}
 
 	Future<void> getImage(String publication) => root
